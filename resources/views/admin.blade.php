@@ -34,6 +34,7 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="">ADD<b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li><a href="/admin">All</a></li>
                             <li><a href="/admin?add=category">Category</a></li>
                             <li><a href="/admin?add=subCategory">Subcategory</a></li>
                         </ul>
@@ -55,8 +56,23 @@
         </div>
     @endif
 
-    @yield('table')
+    @if(!empty($table) OR !empty($form) OR !empty($addSub) OR !empty($addCat) OR !empty($edit))
+        @yield('table')
 
-    @yield('form')
+        @yield('form')
+    @else
+        <ol>
+            @foreach($categories as $category)
+                <li><a href="/admin?edit={{ $category->name }}&editCategoryId={{ $category->id }}">{{ $category->name }} Edit</a> or <a href="/delete?category={{ $category->id }}">Delete</a></li>
+                <ul>
+                    @foreach($subCategories as $subCategory)
+                        @if($category->id == $subCategory->category_id)
+                            <li><a href="/admin?edit={{ $subCategory->name }}&editSubCategoryId={{ $subCategory->id }}">{{ $subCategory->name }} Edit</a> or <a href="/delete?subCategory={{ $subCategory->id }}">Delete</a></li>
+                        @endif
+                    @endforeach
+                </ul>
+            @endforeach
+        </ol>
+    @endif
 
 @endsection

@@ -21,6 +21,8 @@ Auth::routes();
 
 Route::get('/', 'BulletinController@index');
 Route::get('/admin', 'AdminController@admin')->middleware('auth', 'CheckRole:admin');
+Route::get('/edit', 'EditController@edit')->middleware('auth', 'CheckRole:admin');
+Route::get('/delete', 'Delete@delete')->middleware('auth', 'CheckRole:admin');
 Route::get('/add', 'AddController@add')->middleware('auth');
 Route::get('/{category?}/{subCategory?}', 'BulletinController@showSubCategory');
 
@@ -29,6 +31,10 @@ Route::get('/{category}/{subCategory?}', function ($category){
        return redirect()->action('AdminController@admin');
    }elseif ($category == 'add'){
        return redirect()->action('AddController@add');
+   }elseif ($category == 'edit'){
+       return redirect()->action('EditController@edit');
+   }elseif($category == 'delete'){
+       return redirect()->action('Delete@delete');
    }else{
        return redirect()->action('BulletinController@showSubCategory');
    }

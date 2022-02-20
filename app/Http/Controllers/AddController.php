@@ -36,34 +36,6 @@ class AddController extends Controller
             }
         }
 
-        if ($request->has('editUserId')){
-            $rules = [
-                'editName'=>'required|alpha_num',
-                'editEmail'=>'required|email'
-            ];
-            $this->validate($request, $rules);
-
-            $id = $request->editUserId;
-            $user = User::find($id);
-            $user->name = $request->editName;
-            $user->banned = $request->banned;
-            $user->email = $request->editEmail;
-            $user->save();
-
-            return redirect("/admin?user=$user->name")->with('status', 'Edit successful');
-        }
-
-        if ($request->has('editBulletinId')){
-            $id = $request->editBulletinId;
-            $bulletin = Bulletin::find($id);
-            $bulletin->author = $request->editAuthor;
-            $bulletin->status = $request->status;
-            $bulletin->text = $request->editText;
-            $bulletin->save();
-
-            return redirect("/admin?bulletin=$bulletin->id")->with('status', 'Edit successful');
-        }
-
         if ($request->has('newCategoryName')){
             $rules = [
                 'newCategoryName'=>'required|alpha_num',

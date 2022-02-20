@@ -15,12 +15,13 @@
                     </a>
                 </th>
                 <th>Edit</th>
+                <th>Delete</th>
             </thead>
             <tbody>
             @foreach($table as $item)
             <tr>
                 <td>{{ $item->id }}</td>
-                <td>{{ $item->author }}</td>
+                <td><a href="/admin?bulletin=author-{{ $item->author }}">{{ $item->author }}</a></td>
                 {{--{{ dump($item) }}--}}
                 @foreach($subCategories as $subCategory)
                     @if($subCategory->id == $item->subcategory_id)
@@ -41,6 +42,7 @@
                     @endif
                 </td>
                 <td><a href="/admin?bulletin=edit-{{ $item->id }}">Edit</a></td>
+                <td><a href="/delete?bulletin={{ $item->id }}">Delete</a></td>
             </tr>
             @endforeach
                 </tbody>
@@ -50,7 +52,7 @@
 
 @if(!empty($form))
     @section('form')
-        <form action="/add" method="get" role="form">
+        <form action="/edit" method="get" role="form">
             <input type="hidden" name="editBulletinId" value="{{ $form->id }}">
             <div class="form-group">
                 <label for="editName">Edit author name</label>

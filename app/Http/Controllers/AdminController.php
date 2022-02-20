@@ -21,6 +21,8 @@ class AdminController extends Controller
         $subCategories = Subcategory::all();
         $view = 'admin';
         $addSub = '';
+        $addCat = '';
+        $edit = '';
 
         if ($request->has('user')){
             $view = 'user';
@@ -30,10 +32,21 @@ class AdminController extends Controller
             $this->show('bulletin', $request->get('bulletin'), $request->get('status'));
         }elseif ($request->has('add')){
             $view = 'add';
-
+            $addCat = '+';
             if ($request->get('add') == 'subCategory'){
                 $addSub = '+';
             }
+        }elseif ($request->has('edit')){
+            $view = 'edit';
+            $edit = '+';
+            if($request->has('editCategoryId')) {
+                $id = $request->editCategoryId;
+                $hidden = 'editCategoryId';
+            }else{
+                $id = $request->editSubCategoryId;
+                $hidden = 'editSubCategoryId';
+            }
+            $this->form = ['name' => $request->edit, 'id' => $id, 'hidden'=>$hidden];
         }
 
         if ($request->has('ban')){
@@ -64,6 +77,8 @@ class AdminController extends Controller
             'table'=>$this->table,
             'form'=>$this->form,
             'addSub'=>$addSub,
+            'addCat'=>$addCat,
+            'edit'=>$edit,
         ]);
     }
 
@@ -87,10 +102,12 @@ class AdminController extends Controller
             if ($what == 'user') {
                 $this->form = User::where('name', '=', $name)->first();
             }else{
-
                 if (preg_match_all('#edit-(\d+)#', $name, $editId)){
                     $id = $editId[1][0];
                     $this->form = Bulletin::find($id);
+                }elseif(preg_match_all('#author-(.+)#', $name, $author)){
+                    $authorName = $author[1][0];
+                    $this->table = Bulletin::where('author', '=', $authorName)->get();
                 }else{
                     $preg = preg_match('#^\d+$#', $name);
                     if ($preg) {

@@ -13,6 +13,7 @@
             </th>
             <th>Email</th>
             <th>Edit</th>
+            <th>Delete</th>
             <th>Show all bulletins</th>
             </thead>
             <tbody>
@@ -29,7 +30,8 @@
                     </td>
                     <td>{{ $item->email }}</td>
                     <td><a href="/admin?user={{ $item->name }}">Edit</a></td>
-                    <td><a href="/admin?bulletin=all">All bulletins</a></td>
+                    <td><a href="/delete?user={{ $item->id }}">Delete</a></td>
+                    <td><a href="/admin?bulletin=author-{{ $item->name }}">All bulletins</a></td>
                 </tr>
             @endforeach
             </tbody>
@@ -39,7 +41,7 @@
 
 @if(!empty($form))
     @section('form')
-        <form action="/add" method="get" role="form">
+        <form action="/edit" method="get" role="form">
             <input type="hidden" name="editUserId" value="{{ $form->id }}">
             <div class="form-group">
                 <label for="editName">Type new user name</label>
